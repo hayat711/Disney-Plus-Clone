@@ -1,43 +1,65 @@
-import React from 'react'
+import React, { useState ,useEffect} from 'react'
 import styled from 'styled-components'
-
+import {useParams} from 'react-router-dom'
+import db from '../firebase'
+import { useNavigate,  } from 'react-router-dom'
 
 function Detail() {
-  return (
-    <Container>
-            <Background>
-                    <img src="/bao.jpeg" />
-            </Background>
-            <ImageTitle>
-                    <img src="/bau_poster.jpg" />
-            </ImageTitle>
-            <Controls>
-                    <PlayButton>
-                            <img src="/images/play-icon-black.png" />
-                            <span>PLAY</span>
-                    </PlayButton>
-                    <TrailerButton>
-                            <img src="/images/play-icon-white.png" />
-                            <span>Trailer</span>
-                    </TrailerButton>
-                    <AddButton>
-                            <span>+</span>
-                    </AddButton>
-                    <GroupWatchButton>
-                            <img src="/images/group-icon.png" />
-                    </GroupWatchButton>
-            </Controls>
-            <Subtitle>
-                    2018 * 7m * Family, Fantasy, Kids, Animation
-            </Subtitle>
-            <Description>
-                Bao is a 2018 American computer-animated short film written and directed by Domee Shi and produced by Pixar Animation Studios. 
-                It is the first Pixar short film to be directed by a female director.[1] It was screened at the Tribeca Film Festival before being 
-                released with Incredibles 2 on June 15, 2018. The film is about an aging and lonely Chinese Canadian 
-                mother suffering from empty nest syndrome, who receives an unexpected second chance at 
-                motherhood when she makes a steamed bun (baozi) that comes to life. The film won the Academy 
-                Award for Best Animated Short Film at the 91st Academy Awards.[2] 
-            </Description>
+    const {id} = useParams();
+    const navigate = useNavigate();
+    const [movie, setMovie] = useState();
+
+    useEffect (() => {
+        // grab the movie info from db
+            db.collection("movies")
+                  .doc(id)
+                  .get()
+                  .then((doc) => {
+                        if(doc.exists) {
+                        // save the movie data
+                              setMovie(doc.data());
+                        } else {
+                        // redirect to homepage
+                        navigate('/')
+                        }
+            } )
+    }, [])
+
+    return (
+          <Container>
+            {movie && (
+                  <>
+                        <Background>
+                              <img src={movie.backgroundImg} />
+                        </Background>
+                        <ImageTitle>
+                              <img src={movie.titleImg} />
+                        </ImageTitle>
+                        <Controls>
+                              <PlayButton>
+                                    <img src="/images/play-icon-black.png" />
+                                    <span>PLAY</span>
+                              </PlayButton>
+                              <TrailerButton>
+                                    <img src="/images/play-icon-white.png" />
+                                    <span>Trailer</span>
+                              </TrailerButton>
+                              <AddButton>
+                                    <span>+</span>
+                              </AddButton>
+                              <GroupWatchButton>
+                                    <img src="/images/group-icon.png" />
+                              </GroupWatchButton>
+                        </Controls>
+                        <Subtitle>
+                              {movie.subTitle}
+                        </Subtitle>
+                        <Description>
+                              {movie.description}
+                        </Description>
+                  </>
+             )}
+
     </Container>
   )
 }
@@ -146,6 +168,7 @@ const Description = styled.div`
     font-size: 20px;
     line-height: 1.3;
     color: rgb(249, 229, 249);
+    max-width: 600px;
 
     
 `

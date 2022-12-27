@@ -1,36 +1,65 @@
 import React from 'react'
 import styled from 'styled-components'
+import {Link} from 'react-router-dom';
+import { selectMovies} from '../features/movie/movieSlice';
+import { useSelector } from 'react-redux';
+
 
 function Movies() {
-  return (
+
+    const movies = useSelector(selectMovies);
+
+    return (
     <Container>
             <h4>Recommended for You</h4>
             <Content>
-                    <Wrap>
-                            <img src="/images/jisoo.jpg" />
+                {movies && 
+                    movies.map((movie) => (
+                          <Wrap key={movie.id}>
+                            <Link to ={`/detail/${movie.id}`}>
+                                <img src={movie.cardImg} />
+                            </Link>
+                        </Wrap>
+                    ))
+                }
+           
+                  <Wrap>
+                            <img src="/images/3.jpg" />
                     </Wrap>
                     <Wrap>
-                            <img src="/images/jisoo.jpg" />
+                            <img src="/images/2.jpg" />
                     </Wrap>
                     <Wrap>
-                            <img src="/images/jisoo.jpg" />
+                            <img src="/images/4.jpg" />
                     </Wrap>
                     <Wrap>
-                            <img src="/images/jisoo.jpg" />
+                            <img src="/images/5.jpg" />
                     </Wrap>
                     <Wrap>
-                            <img src="/images/jisoo.jpg" />
+                            <img src="/images/R/2.gif" />
                     </Wrap>
                     <Wrap>
-                            <img src="/images/jisoo.jpg" />
+                            <img src="/images/R/1.gif" />
                     </Wrap>
                     <Wrap>
-                            <img src="/images/jisoo.jpg" />
+                            <img src="/images/R/3.gif" />
                     </Wrap>
                     <Wrap>
-                            <img src="/images/jisoo.jpg" />
+                            <img src="/images/R/4.gif" />
                     </Wrap>
-                   
+                    <Wrap>
+                            <img src="/images/R/5.gif" />
+                    </Wrap>
+                    <Wrap>
+                            <img src="/images/R/6.gif" />
+                    </Wrap>
+                    <Wrap>
+                            <img src="/images/R/7.gif" />
+                    </Wrap>
+                    <Wrap>
+                            <img src="/images/R/8.gif" />
+                    </Wrap>
+                  
             </Content>
     </Container>
   )
